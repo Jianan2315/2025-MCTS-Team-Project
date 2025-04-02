@@ -40,7 +40,7 @@ public class TicTacToe implements Game<TicTacToe> {
      *
      * @return the terminal State.
      */
-    State<TicTacToe> runGame() {
+    public State<TicTacToe> runGame() {
         State<TicTacToe> state = start();
         int player = opener();
         while (!state.isTerminal()) {
@@ -135,7 +135,7 @@ public class TicTacToe implements Game<TicTacToe> {
     /**
      * Inner class to define a State of TicTacToe.
      */
-    class TicTacToeState implements State<TicTacToe> {
+    public class TicTacToeState implements State<TicTacToe> {
         /**
          * Method to yield the game of which this is a State.
          *

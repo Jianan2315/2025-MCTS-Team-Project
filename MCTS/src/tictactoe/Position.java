@@ -18,7 +18,7 @@ public class Position {
      * @param last the last player.
      * @return a Position.
      */
-    static Position parsePosition(final String grid, final int last) {
+    public static Position parsePosition(final String grid, final int last) {
         int[][] matrix = new int[gridSize][gridSize];
         int count = 0;
         String[] rows = grid.split("\\n", gridSize);
@@ -39,7 +39,7 @@ public class Position {
      * @param cell the String for the cell.
      * @return a number between -1 and one inclusive.
      */
-    static int parseCell(String cell) {
+    public static int parseCell(String cell) {
         return switch (cell.toUpperCase()) {
             case "O", "0" -> 0;
             case "X", "1" -> 1;
@@ -61,7 +61,8 @@ public class Position {
         int[][] matrix = copyGrid();
         if (matrix[x][y] < 0) {
             // TO BE IMPLEMENTED
-            return null;
+            matrix[x][y] = player;
+            return new Position(matrix, count + 1, player);
             // END SOLUTION
         }
         throw new RuntimeException("Position is occupied: " + x + ", " + y);
@@ -79,7 +80,7 @@ public class Position {
             for (int j = 0; j < gridSize; j++)
                 if (grid[i][j] < 0)
                     // TO BE IMPLEMENTED
-                    ;
+                    result.add(new int[] {i, j});
         // END SOLUTION
         return result;
     }
@@ -139,9 +140,16 @@ public class Position {
      *
      * @return true if there are three cells in a line that are the same and equal to the last player.
      */
-    boolean threeInARow() {
+    public boolean threeInARow() {
         // TO BE IMPLEMENTED
-        return false;
+        for (int i = 0; i < 3; i++) {
+            if (Arrays.equals(xxx, projectRow(i))) return true;
+        }
+        for (int i = 0; i < 3; i++) {
+            if (Arrays.equals(xxx, projectCol(i))) return true;
+        }
+        if (Arrays.equals(xxx, projectDiag(true))) return true;
+        return Arrays.equals(xxx, projectDiag(false));
         // END SOLUTION
     }
 
@@ -151,7 +159,7 @@ public class Position {
      * @param i the row index.
      * @return an array of three ints.
      */
-    int[] projectRow(int i) {
+    public int[] projectRow(int i) {
         return grid[i];
     }
 
@@ -161,7 +169,7 @@ public class Position {
      * @param j the column index.
      * @return an array of three ints.
      */
-    int[] projectCol(int j) {
+    public int[] projectCol(int j) {
         int[] result = new int[gridSize];
         for (int i = 0; i < gridSize; i++)
             result[i] = grid[i][j];
@@ -174,7 +182,7 @@ public class Position {
      * @param b true if the matrix diagonal else transpose diagonal.
      * @return an int[3].
      */
-    int[] projectDiag(boolean b) {
+    public int[] projectDiag(boolean b) {
         int[] result = new int[gridSize];
         for (int j = 0; j < gridSize; j++) {
             int i = b ? j : gridSize - j - 1;
@@ -186,7 +194,7 @@ public class Position {
     /**
      * @return true if this Position has 9 elements.
      */
-    boolean full() {
+    public boolean full() {
         return count == 9;
     }
 
