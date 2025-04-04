@@ -83,7 +83,7 @@ public class MCTS {
     }
     public Node<TicTacToe> chooseBest() {
         return root.children().stream()
-                .min(Comparator.comparing(node -> {
+                .max(Comparator.comparing(node -> {
                     if (node.playouts() == 0) throw new RuntimeException("too few iterations");
                     return node.wins() / node.playouts();
                 }))

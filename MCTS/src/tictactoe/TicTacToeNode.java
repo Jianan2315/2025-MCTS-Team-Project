@@ -73,6 +73,8 @@ public class TicTacToeNode implements Node<TicTacToe> {
             playouts++;
             if (state.winner().isEmpty()) {
                 wins += 0.5;
+            } else {
+                wins += 1.0;
             }
         } else {
             playouts = 0;
