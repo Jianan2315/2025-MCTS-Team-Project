@@ -1,4 +1,4 @@
-package test.tictactoe;
+package tictactoe;
 
 import org.junit.Test;
 import tictactoe.Position;

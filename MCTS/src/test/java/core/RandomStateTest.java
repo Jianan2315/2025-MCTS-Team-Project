@@ -1,4 +1,4 @@
-package test.core;
+package core;
 
 import core.RandomState;
 import org.junit.Test;

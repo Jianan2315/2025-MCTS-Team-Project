@@ -1,4 +1,4 @@
-package test.tictactoe;
+package tictactoe;
 
 import core.State;
 import org.junit.Test;
