@@ -182,6 +182,8 @@ public class TicTacToe implements Game<TicTacToe> {
          *
          * @return the appropriate RandomState.
          */
+        //same random as the instance of TicTacToe
+        //important when debugging
         public Random random() {
             return random;
         }
@@ -212,6 +214,15 @@ public class TicTacToe implements Game<TicTacToe> {
             return new TicTacToeState(position.move(move.player(), ints[0], ints[1]));
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj instanceof TicTacToeState) {
+                return position.equals(((TicTacToeState) obj).position);
+            }
+            return false;
+        }
+
         /**
          * Is the game over?
          *
@@ -224,7 +235,7 @@ public class TicTacToe implements Game<TicTacToe> {
         @Override
         public String toString() {
             return "TicTacToe{\n" +
-                    position +
+                    position.render() +
                     "\n}";
         }
 

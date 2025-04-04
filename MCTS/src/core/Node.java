@@ -57,17 +57,19 @@ public interface Node<G extends Game> {
      *
      * @param state the State for the new chile.
      */
-    void addChild(State<G> state);
+    Node<G> addChild(State<G> state);
 
     /**
      * @return the score for this Node and its descendents a win is worth 2 points, a draw is worth 1 point.
      */
-    int wins();
+    double wins();
 
     /**
      * @return the number of playouts evaluated (including this node). A leaf node will have a playouts value of 1.
      */
     int playouts();
+
+    Node<G> parent();
 
     private void addChildren(final State<G> state) {
         for (Iterator<Move<G>> it = state.moveIterator(state.player()); it.hasNext(); )
