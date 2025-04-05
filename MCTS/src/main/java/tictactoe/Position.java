@@ -13,14 +13,15 @@ public class Position {
 
     /**
      * Parse a string of X, O, and . to form a Position.
+     * Convert X,O or . to 1,0,-1
      *
-     * @param grid the grid represented as a String.
-     * @param last the last player.
+     * @param grid the grid represented as a String. "X X X\nX X X\nX X X"
+     * @param last the last player. 0 or 1
      * @return a Position.
      */
     public static Position parsePosition(final String grid, final int last) {
         int[][] matrix = new int[gridSize][gridSize];
-        int count = 0;
+        int count = 0; // count visited cell
         String[] rows = grid.split("\\n", gridSize);
         for (int i = 0; i < gridSize; i++) {
             String[] cells = rows[i].split(" ", gridSize);
@@ -61,7 +62,8 @@ public class Position {
         int[][] matrix = copyGrid();
         if (matrix[x][y] < 0) {
             // TO BE IMPLEMENTED
-            return null;
+            matrix[x][y] = player;
+            return new Position(matrix, count+1, player);
             // END SOLUTION
         }
         throw new RuntimeException("Position is occupied: " + x + ", " + y);
@@ -79,7 +81,7 @@ public class Position {
             for (int j = 0; j < gridSize; j++)
                 if (grid[i][j] < 0)
                     // TO BE IMPLEMENTED
-                    ;
+                    result.add(new int[] {i, j});
         // END SOLUTION
         return result;
     }
@@ -141,7 +143,13 @@ public class Position {
      */
     public boolean threeInARow() {
         // TO BE IMPLEMENTED
-        return false;
+        for(int i=0; i<gridSize; i++) {
+            if (Arrays.equals(projectCol(i), xxx))
+                return true;
+            if (Arrays.equals(projectRow(i), xxx))
+                return true;
+        }
+        return Arrays.equals(projectDiag(true), xxx) || Arrays.equals(projectDiag(false), xxx);
         // END SOLUTION
     }
 
@@ -171,7 +179,7 @@ public class Position {
     /**
      * Get the diagonal according to b.
      *
-     * @param b true if the matrix diagonal else transpose diagonal.
+     * @param b true if the matrix diagonal else secondary diagonal.
      * @return an int[3].
      */
     public int[] projectDiag(boolean b) {
