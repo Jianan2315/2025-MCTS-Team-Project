@@ -64,10 +64,14 @@ public interface Node<G extends Game> {
      */
     double wins();
 
+    void winsDelta(double delta);
+
     /**
      * @return the number of playouts evaluated (including this node). A leaf node will have a playouts value of 1.
      */
     int playouts();
+
+    void playoutsDelta(int delta);
 
     Node<G> parent();
 

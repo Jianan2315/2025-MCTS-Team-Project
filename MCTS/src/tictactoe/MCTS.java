@@ -56,11 +56,30 @@ public class MCTS {
             root.addChild(nextState);
         }
     }
+
+//    public Node<TicTacToe> select() {
+//        Collection<Node<TicTacToe>> nodes = root.children();
+//        int randomIndex = root.state().random().nextInt(nodes.size());
+//        return new ArrayList<>(nodes).get(randomIndex);
+//    }
+
     public Node<TicTacToe> select() {
-        Collection<Node<TicTacToe>> nodes = root.children();
-        int randomIndex = root.state().random().nextInt(nodes.size());
-        return new ArrayList<>(nodes).get(randomIndex);
+        return root.children().stream()
+                .max(Comparator.comparing(this::ucb1))
+                .orElseThrow(() -> new RuntimeException("no children!"));
     }
+
+    public double ucb1(Node<TicTacToe> node) {
+        int n = node.playouts();
+        if (n == 0) {
+            return Double.POSITIVE_INFINITY;
+        }
+        double w = node.wins();
+        int N = node.parent().playouts();
+        double C = Math.sqrt(2);
+        return (w / n) + C * Math.sqrt(Math.log(N) / n);
+    }
+
     public Node<TicTacToe> rollout(Node<TicTacToe> node) {
         Node<TicTacToe> n = node;
         while (!n.isLeaf()) {
@@ -81,12 +100,11 @@ public class MCTS {
             leaf.backPropagate();
         }
     }
+
+    //used to choose the node with the highest winning rate
     public Node<TicTacToe> chooseBest() {
         return root.children().stream()
-                .max(Comparator.comparing(node -> {
-                    if (node.playouts() == 0) throw new RuntimeException("too few iterations");
-                    return node.wins() / node.playouts();
-                }))
+                .max(Comparator.comparing(Node::playouts))
                 .orElseThrow(() -> new RuntimeException("leaf node?"));
     }
 

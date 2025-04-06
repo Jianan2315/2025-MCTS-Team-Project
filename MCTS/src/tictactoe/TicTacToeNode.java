@@ -69,22 +69,22 @@ public class TicTacToeNode implements Node<TicTacToe> {
      * This method sets the number of wins and playouts according to the children states.
      */
     public void backPropagate() {
-        if (children.isEmpty()) {
-            playouts++;
-            if (state.winner().isEmpty()) {
-                wins += 0.5;
-            } else {
-                wins += 1.0;
-            }
+        if (!children.isEmpty()) throw new RuntimeException("backpropagation should begin from leaf node!");
+        playouts++;
+        double val;
+        if (state.winner().isEmpty()) {
+            val = 0.5;
         } else {
-            playouts = 0;
-            wins = 0;
-            for (Node<TicTacToe> child : children) {
-                wins += (child.playouts() - child.wins());
-                playouts += child.playouts();
-            }
+            val = 1.0;
         }
-        if (parent != null) parent.backPropagate();
+        wins += val;
+        Node<TicTacToe> current = parent;
+        while (current != null) {
+            current.playoutsDelta(1);
+            val = 1.0 - val;
+            current.winsDelta(val);
+            current = current.parent();
+        }
     }
 
     /**
@@ -94,11 +94,19 @@ public class TicTacToeNode implements Node<TicTacToe> {
         return wins;
     }
 
+    public void winsDelta(double delta) {
+        wins += delta;
+    }
+
     /**
      * @return the number of playouts evaluated (including this node). A leaf node will have a playouts value of 1.
      */
     public int playouts() {
         return playouts;
+    }
+
+    public void playoutsDelta(int delta) {
+        playouts += delta;
     }
 
     public Node<TicTacToe> parent() {
