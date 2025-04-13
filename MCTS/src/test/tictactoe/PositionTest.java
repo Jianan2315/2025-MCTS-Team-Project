@@ -55,10 +55,24 @@ public class PositionTest {
 
     @Test
     public void testReflect() {
+        String boardStr = "X . O\n. X .\nO . .";
+        Position pos = Position.parsePosition(boardStr, 0);
+        Position horizontalReflect = pos.reflect(0);
+        Position expectedHorizontal = Position.parsePosition("O . .\n. X .\nX . O", 0);
+        assertEquals(horizontalReflect, expectedHorizontal);
+        Position verticalReflect = pos.reflect(1);
+        Position expectedVertical = Position.parsePosition("O . X\n. X .\n. . O", 0);
+        assertEquals(verticalReflect, expectedVertical);
     }
 
     @Test
     public void testRotate() {
+        //counterclockwise!
+        String boardStr = "X . O\n. X .\n. . O";
+        Position pos = Position.parsePosition(boardStr, 0);
+        Position rotated = pos.rotate();
+        Position expectedRotation = Position.parsePosition("O . O\n. X .\nX . .", 0);
+        assertEquals(rotated, expectedRotation);
     }
 
     @Test

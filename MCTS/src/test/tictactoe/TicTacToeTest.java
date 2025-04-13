@@ -21,4 +21,5 @@ public class TicTacToeTest {
         if (winner.isPresent()) assertEquals(Integer.valueOf(TicTacToe.X), winner.get());
         else fail("no winner");
     }
+
 }

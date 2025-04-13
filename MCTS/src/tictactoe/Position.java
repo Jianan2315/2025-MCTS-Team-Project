@@ -109,7 +109,7 @@ public class Position {
     }
 
     /**
-     * Method to rotate this Position by 90 degrees clockwise.
+     * Method to rotate this Position by 90 degrees counterclockwise.
      * TESTME
      *
      * @return a new Position which is rotated from this.
