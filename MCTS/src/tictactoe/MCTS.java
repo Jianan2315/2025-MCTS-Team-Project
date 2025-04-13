@@ -93,8 +93,8 @@ public class MCTS {
     public void iteration(int n) {
         //node should not be a leaf.
         if (root.isLeaf()) throw new RuntimeException("leaf node does not need mcts!");
+        expand();
         for (int i = 0; i < n; i++) {
-            expand();
             Node<TicTacToe> hopeful = select();
             Node<TicTacToe> leaf = rollout(hopeful);
             leaf.backPropagate();
