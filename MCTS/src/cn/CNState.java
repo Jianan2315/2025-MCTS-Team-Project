@@ -2,6 +2,7 @@ package cn;
 
 import core.Move;
 import core.State;
+import tictactoe.TicTacToe;
 
 import java.util.*;
 
@@ -69,6 +70,14 @@ public class CNState implements State<ConnectN> {
         return moves;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof CNState) {
+            return position.equals(((CNState) obj).position);
+        }
+        return false;
+    }
     @Override
     public State<ConnectN> next(Move<ConnectN> move) {
         Position newPosition = position.next(move);
