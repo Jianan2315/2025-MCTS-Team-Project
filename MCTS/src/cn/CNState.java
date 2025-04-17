@@ -8,7 +8,16 @@ import java.util.*;
 public class CNState implements State<ConnectN> {
     public ConnectN theGame;
     public Position position;
+    public Random random;
     public Optional<Integer> winner;
+
+    public CNState(ConnectN theGame, Position position, Random random, Optional<Integer> winner) {
+        this.theGame = theGame;
+        this.position = position;
+        this.random = random;
+        this.winner = winner;
+    }
+
     @Override
     public ConnectN game() {
         return theGame;
@@ -31,7 +40,7 @@ public class CNState implements State<ConnectN> {
 
     @Override
     public Random random() {
-        return null;
+        return random;
     }
 
     @Override
