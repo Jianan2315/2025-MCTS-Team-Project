@@ -11,11 +11,27 @@ public class CNState implements State<ConnectN> {
     public Random random;
     public Optional<Integer> winner;
 
-    public CNState(ConnectN theGame, Position position, Random random, Optional<Integer> winner) {
+    public CNState(ConnectN theGame, Position position, Optional<Integer> winner) {
         this.theGame = theGame;
         this.position = position;
-        this.random = random;
+        this.random = theGame.random;
         this.winner = winner;
+    }
+
+    //initialize constructor
+    public CNState(ConnectN theGame, int N, int width, int height) {
+        this.theGame = theGame;
+        this.position = new Position(N, width, height);
+        this.random = theGame.random;
+        this.winner = Optional.empty();
+    }
+
+    //initialize constructor
+    public CNState(ConnectN theGame) {
+        this.theGame = theGame;
+        this.position = new Position();
+        this.random = theGame.random;
+        this.winner = Optional.empty();
     }
 
     @Override
@@ -55,6 +71,8 @@ public class CNState implements State<ConnectN> {
 
     @Override
     public State<ConnectN> next(Move<ConnectN> move) {
-        return null;
+        Position newPosition = position.next(move);
+        Optional<Integer> newWinner = newPosition.determineWinner();
+        return new CNState(theGame, newPosition, newWinner);
     }
 }

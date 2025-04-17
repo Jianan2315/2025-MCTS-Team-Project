@@ -35,6 +35,20 @@ public class Position {
             Rows[i] = height;
         }
     }
+    public Position() {
+        this.N = 5;
+        this.width = 9;
+        this.height = 7;
+        this.grid = new int[height][width];
+        this.lastPlayer = -1;
+        this.currentPlayer = 0;
+        this.lastMove = -1;
+        this.count = 0;
+        Rows = new int[width];
+        for (int i = 0; i < width; i++) {
+            Rows[i] = height;
+        }
+    }
     public Position(int N, int width, int height, int[][] grid, int lastPlayer, int currentPlayer, int lastMove, int count, int[] rows) {
         this.N = N;
         this.width = width;
