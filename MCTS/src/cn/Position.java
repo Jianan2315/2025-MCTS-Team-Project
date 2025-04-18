@@ -220,4 +220,7 @@ public class Position {
         }
         return count2 >= N;
     }
+    public boolean checkValidity(int j) {
+        return (j >= 0) && (j < width) && !colFull(j);
+    }
 }
