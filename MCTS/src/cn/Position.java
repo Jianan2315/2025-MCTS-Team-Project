@@ -26,6 +26,11 @@ public class Position {
         this.width = width;
         this.height = height;
         this.grid = new int[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                grid[i][j] = -1;
+            }
+        }
         this.lastPlayer = -1;
         this.currentPlayer = 0;
         this.lastMove = -1;
@@ -35,11 +40,17 @@ public class Position {
             Rows[i] = height;
         }
     }
+    //initialize constructor
     public Position() {
         this.N = 5;
         this.width = 9;
         this.height = 7;
         this.grid = new int[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                grid[i][j] = -1;
+            }
+        }
         this.lastPlayer = -1;
         this.currentPlayer = 0;
         this.lastMove = -1;
@@ -91,18 +102,32 @@ public class Position {
         return switch (x) {
             case 0 -> 'X';
             case 1 -> 'O';
-            default -> '_';
+            default -> ' ';
         };
     }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < height; i++) {
+            sb.append(i);
+            sb.append(' ');
             for (int j = 0; j < width; j++) {
+                sb.append("|");
                 sb.append(render(grid[i][j]));
             }
+            sb.append('|');
             sb.append('\n');
         }
+        sb.append("  ");
+        for (int i = 0; i < width; i++) {
+            sb.append("+-");
+        }
+        sb.append("+\n  ");
+        for (int i = 0; i < width; i++) {
+            sb.append(' ');
+            sb.append(i);
+        }
+        sb.append(' ');
         return sb.toString();
     }
     public int[][] copyGrid() {

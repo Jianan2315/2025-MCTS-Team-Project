@@ -2,7 +2,6 @@ package cn;
 
 import core.Move;
 import core.State;
-import tictactoe.TicTacToe;
 
 import java.util.*;
 
@@ -83,5 +82,10 @@ public class CNState implements State<ConnectN> {
         Position newPosition = position.next(move);
         Optional<Integer> newWinner = newPosition.determineWinner();
         return new CNState(theGame, newPosition, newWinner);
+    }
+
+    @Override
+    public String toString() {
+        return position.toString();
     }
 }

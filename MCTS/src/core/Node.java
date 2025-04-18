@@ -35,17 +35,17 @@ public interface Node<G extends Game> {
      */
     Collection<Node<G>> children();
 
-    /**
-     * Method which adds the immediate children of this Node.
-     * NOTE this is a mutating method. I'm not sure if that's best.
-     */
-    default void explore() {
-        if (isLeaf()) return;
-        if (children().isEmpty()) {
-            addChildren(state());
-            backPropagate();
-        } else throw new RuntimeException("exploration done already for " + this);
-    }
+//    /**
+//     * Method which adds the immediate children of this Node.
+//     * NOTE this is a mutating method. I'm not sure if that's best.
+//     */
+//    default void explore() {
+//        if (isLeaf()) return;
+//        if (children().isEmpty()) {
+//            addChildren(state());
+//            backPropagate();
+//        } else throw new RuntimeException("exploration done already for " + this);
+//    }
 
     /**
      * This method sets the number of wins and playouts according to the children states.
@@ -78,6 +78,11 @@ public interface Node<G extends Game> {
     private void addChildren(final State<G> state) {
         for (Iterator<Move<G>> it = state.moveIterator(state.player()); it.hasNext(); )
             addChild(state.next(it.next()));
+    }
+
+    default double winningRate() {
+        if (playouts() == 0) throw new RuntimeException("there is no simulation!");
+        return wins() / playouts();
     }
 
 }

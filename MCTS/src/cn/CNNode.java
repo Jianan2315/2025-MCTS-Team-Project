@@ -2,24 +2,27 @@ package cn;
 
 import core.Node;
 import core.State;
-import tictactoe.TicTacToe;
-import tictactoe.TicTacToeNode;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class CNNode implements Node<ConnectN> {
     public State<ConnectN> state;
-    public Collection<Node<ConnectN>> children;
+    public Collection<Node<ConnectN>> children = new ArrayList<>();
     public Node<ConnectN> parent;
     public double wins = 0;
     public int playouts = 0;
 
     public CNNode(State<ConnectN> state, Node<ConnectN> parent) {
         this.state = state;
-        this.children = new ArrayList<>();
         this.parent = parent;
     }
+
+    public CNNode(State<ConnectN> state) {
+        this.state = state;
+        this.parent = null;
+    }
+
     @Override
     public boolean isLeaf() {
         return state.isTerminal();
@@ -94,4 +97,5 @@ public class CNNode implements Node<ConnectN> {
     public Node<ConnectN> parent() {
         return parent;
     }
+
 }
