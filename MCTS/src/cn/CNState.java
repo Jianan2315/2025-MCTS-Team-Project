@@ -62,6 +62,8 @@ public class CNState implements State<ConnectN> {
     @Override
     public Collection<Move<ConnectN>> moves(int player) {
         ArrayList<Move<ConnectN>> moves = new ArrayList<>();
+        //This is important because a terminal state should not have further changes.
+        if (isTerminal()) return moves;
         int p = position.currentPlayer;
         for (int j = 0; j < position.width; j++) {
             if (!position.colFull(j)) moves.add(new CNMove(p, j));

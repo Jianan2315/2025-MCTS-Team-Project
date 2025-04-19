@@ -26,9 +26,11 @@ public class MCTS {
         int human = 0;
         int times = 1000;
         System.out.println(mcts.root.state());
+        System.out.println();
         while (!mcts.root.isLeaf()) {
             if ((count % 2) == human) {
                 mcts.humanNext();
+                //mcts.chooseNextDecorated(times);
             } else {
                 mcts.chooseNextDecorated(times);
             }
@@ -63,6 +65,7 @@ public class MCTS {
         if (!root.isLeaf()) {
             iteration(1000);
             System.out.println("Estimated winning rate for human after move is " + root.winningRate());
+            System.out.println();
         }
     }
 

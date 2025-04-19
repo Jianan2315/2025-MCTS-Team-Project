@@ -107,27 +107,21 @@ public class Position {
     }
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        int bufferSize = (height * (width * 2 + 4)) + (width * 3 + 4);
+        StringBuilder sb = new StringBuilder(bufferSize);
         for (int i = 0; i < height; i++) {
-            sb.append(i);
-            sb.append(' ');
+            sb.append(i).append(' ');
             for (int j = 0; j < width; j++) {
-                sb.append("|");
-                sb.append(render(grid[i][j]));
+                sb.append('|').append(render(grid[i][j]));
             }
-            sb.append('|');
-            sb.append('\n');
+            sb.append("|\n");
         }
-        sb.append("  ");
+        sb.append("  +");
+        sb.append("-+".repeat(width));
+        sb.append("\n  ");
         for (int i = 0; i < width; i++) {
-            sb.append("+-");
+            sb.append(' ').append(i);
         }
-        sb.append("+\n  ");
-        for (int i = 0; i < width; i++) {
-            sb.append(' ');
-            sb.append(i);
-        }
-        sb.append(' ');
         return sb.toString();
     }
     public int[][] copyGrid() {
