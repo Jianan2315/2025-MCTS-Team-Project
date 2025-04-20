@@ -53,6 +53,10 @@ public class MCTS {
                     System.out.println("And the current position is");
                     System.out.println(root.state());
                 }
+            } else if (j == -2) {
+                chooseNext(5000);
+                System.out.println("AI suggested move is " + getLastMove());
+                root = root.parent();
             } else if (!((CNState) root.state()).position.checkValidity(j)) {
                 System.out.println("Invalid move!");
             } else {

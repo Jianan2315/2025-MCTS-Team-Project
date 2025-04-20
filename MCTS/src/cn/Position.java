@@ -76,6 +76,7 @@ public class Position {
             int p = move.player();
             if (p != currentPlayer) throw new RuntimeException("player mismatch!");
             int j = ((CNMove) move).j;
+            if (!checkValidity(j)) throw new RuntimeException("not a valid move!");
             int[][] newGrid = copyGrid();
             newGrid[Rows[j] - 1][j] = p;
             int[] newRows = Rows.clone();
@@ -139,7 +140,6 @@ public class Position {
     }
     //determineWinner should only be invoked when count > 0
     public Optional<Integer> determineWinner() {
-        if (count == 0) throw new RuntimeException("determineWinner should only be invoked when count > 0");
         if (count < 2 * N - 1) return Optional.empty();
         if (checkVertical()) return Optional.of(lastPlayer);
         if (checkHorizontal()) return Optional.of(lastPlayer);
