@@ -1,9 +1,10 @@
 package tictactoe;
 
+import core.Node;
+import core.State;
 import org.junit.Test;
-import tictactoe.Position;
-import tictactoe.TicTacToe;
-import tictactoe.TicTacToeNode;
+
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,16 +35,33 @@ public class TicTacToeNodeTest {
 
     @Test
     public void children() {
-        // no tests yet
+        TicTacToe.TicTacToeState state = new TicTacToe().new TicTacToeState();
+        TicTacToeNode node = new TicTacToeNode(state);
+        assertEquals(0, node.children().size());
+        node.expand(); // expand one child
+        Collection<Node<TicTacToe>> children = node.children();
+        assertEquals(1, children.size());
     }
 
     @Test
     public void addChild() {
-        // no tests yet
+        TicTacToe.TicTacToeState state = new TicTacToe().new TicTacToeState();
+        TicTacToeNode node = new TicTacToeNode(state);
+        State<TicTacToe> nextState = state.next(state.moves(state.player()).iterator().next());
+        node.addChild(nextState);
+        assertEquals(1, node.children().size());
     }
 
     @Test
     public void backPropagate() {
-        // no tests yet
+        TicTacToe.TicTacToeState state = new TicTacToe().new TicTacToeState();
+        TicTacToeNode node = new TicTacToeNode(state);
+        State<TicTacToe> nextState = state.next(state.moves(state.player()).iterator().next());
+        node.addChild(nextState);
+        Node<TicTacToe> child = node.children().iterator().next();
+        child.update(2);
+        node.backPropagate();
+        assertEquals(2, node.wins());
+        assertEquals(1, node.playouts());
     }
 }

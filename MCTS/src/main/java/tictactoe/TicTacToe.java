@@ -130,6 +130,16 @@ public class TicTacToe implements Game<TicTacToe> {
         private final int player;
         private final int i;
         private final int j;
+
+        public int row() {
+            return i;
+        }
+
+        public int col() {
+            return j;
+        }
+
+
     }
 
     /**
