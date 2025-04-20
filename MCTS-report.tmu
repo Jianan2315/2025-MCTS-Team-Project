@@ -1,0 +1,1929 @@
+<TMU|<tuple|1.0.5|1.2.9.7>>
+
+<style|<tuple|generic|chinese|goldfish>>
+
+<\body>
+  <doc-data|<doc-title|MCTS Report>>
+
+  <section|TicTacToe>
+
+  <subsection|Features of the Implementation for MCTS>
+
+  <\enumerate>
+    <item>The <code*|wins> is viewed from the perspective of the last player of each node.
+
+    <item>We add a field <code*|parent> to <code*|Node> for backpropagation.
+
+    <item>Now <code*|addChild> returns the added child node.
+
+    <item>Backpropagation is faster than the origanal version since it only propagates the change to <code*|wins> and <code*|playouts> of each node.
+
+    <item>We keep track of the structures generated during the stage of rollouts.
+
+    <item>We use UCB1 to select the node for rollouts:
+
+    <\equation*>
+      <frac|w|n>+<sqrt|2>\<cdot\><sqrt|<frac|ln N|n>>
+    </equation*>
+
+    where <math|w> is <code*|wins> of the current node, <math|n> is <code*|playouts> of the current node, and <math|N> is <code*|playouts> of the parent node. <math|<sqrt|2>> is the exploration parameter, which can be chosen empirically.
+  </enumerate>
+
+  <subsection|Usage>
+
+  <\enumerate>
+    <item>The variable <code*|human> is used to control who is first to move: if <code*|human> is <code*|1>, then human is <code*|X>; if <code*|human> is <code*|0>, then human is <code*|O>.
+
+    <item>The variable <code*|times> is used to control the number of iterations during each process of MCTS.
+  </enumerate>
+
+  <subsection|Examples>
+
+  <subsubsection|<code*|human> is <code*|1>>
+
+  <\code>
+    TicTacToe{
+
+    . . .
+
+    . . .
+
+    . . .
+
+    }
+
+    enter your move (you are X
+
+    1 1
+
+    TicTacToe{
+
+    . . .
+
+    . X .
+
+    . . .
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    . . .
+
+    . X .
+
+    . . O
+
+    }
+
+    enter your move (you are X
+
+    0 0
+
+    TicTacToe{
+
+    X . .
+
+    . X .
+
+    . . O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    X . .
+
+    . X .
+
+    O . O
+
+    }
+
+    enter your move (you are X
+
+    2 1
+
+    TicTacToe{
+
+    X . .
+
+    . X .
+
+    O X O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    X O .
+
+    . X .
+
+    O X O
+
+    }
+
+    enter your move (you are X
+
+    1 0
+
+    TicTacToe{
+
+    X O .
+
+    X X .
+
+    O X O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    X O .
+
+    X X O
+
+    O X O
+
+    }
+
+    enter your move (you are X
+
+    0 2
+
+    TicTacToe{
+
+    X O X
+
+    X X O
+
+    O X O
+
+    }
+
+    draw
+  </code>
+
+  <subsubsection|<code*|human> is <code*|0>>
+
+  <\code>
+    TicTacToe{
+
+    . . .
+
+    . . .
+
+    . . .
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    . . .
+
+    . X .
+
+    . . .
+
+    }
+
+    enter your move (you are O
+
+    2 2
+
+    TicTacToe{
+
+    . . .
+
+    . X .
+
+    . . O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    . . .
+
+    . X .
+
+    . X O
+
+    }
+
+    enter your move (you are O
+
+    0 1
+
+    TicTacToe{
+
+    . O .
+
+    . X .
+
+    . X O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    . O X
+
+    . X .
+
+    . X O
+
+    }
+
+    enter your move (you are O
+
+    2 0
+
+    TicTacToe{
+
+    . O X
+
+    . X .
+
+    O X O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    . O X
+
+    . X X
+
+    O X O
+
+    }
+
+    enter your move (you are O
+
+    1 0
+
+    TicTacToe{
+
+    . O X
+
+    O X X
+
+    O X O
+
+    }
+
+    AI thinking ...
+
+    TicTacToe{
+
+    X O X
+
+    O X X
+
+    O X O
+
+    }
+
+    draw
+  </code>
+
+  <section|ConnectN>
+
+  <subsection|Introduction>
+
+  Connect Four is a gravity-based Gomoku-like game. ConnectN is generalization of the classic Connect Four.
+
+  <subsection|Features of the Implementation for ConnectN>
+
+  <\enumerate>
+    <item>The width and height of the board is configurable. The number of stones in a line for a player to win is also configurable.
+
+    <item>We provide some facilities to help novices with learning ConnectN, such as taking-back and AI advice.
+
+    <item>The strategy of MCTS implementation is almost the same as TicTacToe.
+
+    <item>You can choose to play against a human player or an AI. Of course, with little modification, you can configure the game to be conducted by two human players or two AIs.
+
+    <item>AI will evaluate the winning rate after the move, both for human and AI.
+
+    <item><code*|moves> now will correctly compute the available moves when facing a terminal state. (In fact, there is none!)
+  </enumerate>
+
+  <subsection|Usage>
+
+  <\enumerate>
+    <item><strong|You may have to change the size of the heap space for JVM!>
+
+    <item>The variable <code*|human> is used to control who is first to move: if <code*|human> is <code*|0>, then human is <code*|X>; if <code*|human> is <code*|1>, then human is <code*|O>. <code*|X> is the first player to move.
+
+    <item>The variable <code*|times> is used to control the number of iterations during each process of MCTS. (You can try different strategies for the number of iterations, such as reducing or increasing the number of iterations as the game goes.)
+
+    <item>You enter the column for the move, beginning from zero. If the move is invalid, then it will prompt you to retry. <code*|-1> is for human players to take back the last move. <code*|-2> is for human players to get advice from AI (based on MCTS also).
+  </enumerate>
+
+  <subsection|Examples>
+
+  <subsubsection|<code*|human> is <code*|0>>
+
+  <\code>
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \| \| \| \| \| \|
+
+    6 \| \| \| \| \| \| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    \;
+
+    Please enter your move (you are X
+
+    4
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \| \| \| \| \| \|
+
+    6 \| \| \| \| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.5895
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 2
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \| \| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.46226415094339623
+
+    \;
+
+    Please enter your move (you are X
+
+    4
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.6600387972841901
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \|O\| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.4086161879895561
+
+    \;
+
+    Please enter your move (you are X
+
+    2
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.574784276126558
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\| \| \| \| \|
+
+    6 \| \| \|O\| \|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.47424242424242424
+
+    \;
+
+    Please enter your move (you are X
+
+    5
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\|X\| \| \| \|
+
+    6 \| \| \|O\| \|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.6603498542274052
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \| \| \| \|
+
+    4 \| \| \| \| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\|X\| \| \| \|
+
+    6 \| \| \|O\| \|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.39054054054054055
+
+    \;
+
+    Please enter your move (you are X
+
+    4
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \| \| \| \|
+
+    4 \| \| \| \| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\|X\| \| \| \|
+
+    6 \| \| \|O\| \|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.678709055876686
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 2
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \| \| \| \|
+
+    4 \| \| \|O\| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\|X\| \| \| \|
+
+    6 \| \| \|O\| \|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.34655172413793106
+
+    \;
+
+    Please enter your move (you are X
+
+    2
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \|X\| \|O\| \| \| \| \|
+
+    4 \| \| \|O\| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\|X\| \| \| \|
+
+    6 \| \| \|O\| \|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.6445198836081474
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 3
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \|X\| \|O\| \| \| \| \|
+
+    4 \| \| \|O\| \|O\| \| \| \| \|
+
+    5 \| \| \|X\| \|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.3775167785234899
+
+    \;
+
+    Please enter your move (you are X
+
+    3
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \|X\| \|O\| \| \| \| \|
+
+    4 \| \| \|O\| \|O\| \| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.8435374149659864
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \|X\| \|O\| \| \| \| \|
+
+    4 \| \| \|O\| \|O\|O\| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.227735368956743
+
+    \;
+
+    Please enter your move (you are X
+
+    3
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \|X\| \|O\| \| \| \| \|
+
+    4 \| \| \|O\|X\|O\|O\| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.8191489361702128
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\| \| \| \| \|
+
+    3 \| \| \|X\| \|O\|O\| \| \| \|
+
+    4 \| \| \|O\|X\|O\|O\| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.21069182389937108
+
+    \;
+
+    Please enter your move (you are X
+
+    5
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\|X\| \| \| \|
+
+    3 \| \| \|X\| \|O\|O\| \| \| \|
+
+    4 \| \| \|O\|X\|O\|O\| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate for human after move is 0.8626320845341018
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\|X\| \| \| \|
+
+    3 \| \| \|X\| \|O\|O\| \| \| \|
+
+    4 \| \| \|O\|X\|O\|O\| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\| \| \| \|
+
+    6 \| \| \|O\|O\|X\|O\|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.17446043165467626
+
+    \;
+
+    Please enter your move (you are X
+
+    6
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|X\|X\| \| \| \|
+
+    3 \| \| \|X\| \|O\|O\| \| \| \|
+
+    4 \| \| \|O\|X\|O\|O\| \| \| \|
+
+    5 \| \| \|X\|X\|X\|X\|X\| \| \|
+
+    6 \| \| \|O\|O\|X\|O\|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    X wins
+  </code>
+
+  <subsubsection|A game between two AIs>
+
+  <\code>
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \| \| \| \| \| \|
+
+    6 \| \| \| \| \| \| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \| \| \| \| \| \|
+
+    6 \| \| \| \| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.5964467005076142
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 2
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \| \| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.5024509803921569
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \| \| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6498054474708171
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \| \| \| \|
+
+    6 \| \| \|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.3888888888888889
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 1
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \| \| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.7019704433497537
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \| \| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.4541284403669725
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \|X\| \| \| \| \|
+
+    5 \| \| \| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6781609195402298
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \| \| \| \|
+
+    4 \| \| \| \| \|X\| \|O\| \| \|
+
+    5 \| \| \| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.3952380952380952
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \| \| \|X\| \| \|
+
+    4 \| \| \| \| \|X\| \|O\| \| \|
+
+    5 \| \| \| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6890243902439024
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \| \| \| \|X\| \|O\| \| \|
+
+    5 \| \| \| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.43167701863354035
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 1
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \| \| \| \|X\| \|O\| \| \|
+
+    5 \| \|X\| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6513157894736842
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 1
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\| \| \|X\| \|O\| \| \|
+
+    5 \| \|X\| \| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.4228855721393035
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 2
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \| \| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\| \| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6584158415841584
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \| \| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\| \| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.36163522012578614
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 4
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\| \| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6867088607594937
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 2
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \| \| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.38484848484848483
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\| \| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.6560509554140127
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 7
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \| \| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\|O\| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.4119170984455959
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 2
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\| \|O\|O\| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.7244897959183674
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\| \|O\| \| \|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.3333333333333333
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\| \| \|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.7255434782608695
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 7
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\| \|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\| \|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.37012987012987014
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 8
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \| \| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\| \|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.7170212765957447
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\| \| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\| \|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.300561797752809
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 7
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\| \|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.7907608695652174
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 8
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\| \|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.2457627118644068
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\| \|X\| \| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.8486238532110092
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \| \| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\|O\|X\| \| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.22588832487309646
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 6
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\| \|X\| \| \|
+
+    3 \| \| \|X\| \|O\|O\|X\| \| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.8304093567251462
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\| \|O\| \| \|
+
+    2 \| \| \| \| \|O\|O\|X\| \| \|
+
+    3 \| \| \|X\| \|O\|O\|X\| \| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.2345360824742268
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 5
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\|X\|O\| \| \|
+
+    2 \| \| \| \| \|O\|O\|X\| \| \|
+
+    3 \| \| \|X\| \|O\|O\|X\| \| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.8459821428571429
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 7
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\|X\|O\| \| \|
+
+    2 \| \| \| \| \|O\|O\|X\| \| \|
+
+    3 \| \| \|X\| \|O\|O\|X\|O\| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.23697916666666666
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 7
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\|X\|O\| \| \|
+
+    2 \| \| \| \| \|O\|O\|X\|X\| \|
+
+    3 \| \| \|X\| \|O\|O\|X\|O\| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\| \|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.8665413533834586
+
+    \;
+
+    AI thinking ... (AI is O
+
+    The chosen move is 3
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\|X\|O\| \| \|
+
+    2 \| \| \| \| \|O\|O\|X\|X\| \|
+
+    3 \| \| \|X\| \|O\|O\|X\|O\| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\| \|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\|O\|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 0.24812967581047382
+
+    \;
+
+    AI thinking ... (AI is X
+
+    The chosen move is 3
+
+    The resulting position is
+
+    0 \| \| \| \| \| \| \|X\| \| \|
+
+    1 \| \| \| \| \|X\|X\|O\| \| \|
+
+    2 \| \| \| \| \|O\|O\|X\|X\| \|
+
+    3 \| \| \|X\| \|O\|O\|X\|O\| \|
+
+    4 \| \|O\|O\| \|X\|X\|O\|X\| \|
+
+    5 \| \|X\|X\|X\|X\|X\|O\|O\|O\|
+
+    6 \| \|X\|O\|O\|X\|O\|O\|O\|X\|
+
+    \ \ +-+-+-+-+-+-+-+-+-+
+
+    \ \ \ 0 1 2 3 4 5 6 7 8
+
+    Estimated winning rate after move for AI is 1.0
+
+    \;
+
+    X wins
+  </code>
+</body>
+
+<\initial>
+  <\collection>
+    <associate|page-medium|paper>
+    <associate|page-screen-margin|false>
+  </collection>
+</initial>
+
+<\references>
+  <\collection>
+    <associate|auto-1|<tuple|1|1>>
+    <associate|auto-10|<tuple|2.3|?>>
+    <associate|auto-11|<tuple|2.4|?>>
+    <associate|auto-12|<tuple|2.4.1|?>>
+    <associate|auto-13|<tuple|2.4.2|?>>
+    <associate|auto-2|<tuple|1.1|1>>
+    <associate|auto-3|<tuple|1.2|1>>
+    <associate|auto-4|<tuple|1.3|1>>
+    <associate|auto-5|<tuple|1.3.1|1>>
+    <associate|auto-6|<tuple|1.3.2|2>>
+    <associate|auto-7|<tuple|2|4>>
+    <associate|auto-8|<tuple|2.1|?>>
+    <associate|auto-9|<tuple|2.2|?>>
+    <associate|firstHeading|<tuple|2.1|?>>
+  </collection>
+</references>
+
+<\auxiliary>
+  <\collection>
+    <\associate|toc>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>TicTacToe> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-1><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|1.1<space|2spc>Features of the Implementation for MCTS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-2>>
+
+      <with|par-left|<quote|1tab>|1.2<space|2spc>Usage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-3>>
+
+      <with|par-left|<quote|1tab>|1.3<space|2spc>Examples <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-4>>
+
+      <with|par-left|<quote|2tab>|1.3.1<space|2spc><with|font-family|<quote|tt>|human> is <with|font-family|<quote|tt>|1> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-5>>
+
+      <with|par-left|<quote|2tab>|1.3.2<space|2spc><with|font-family|<quote|tt>|human> is <with|font-family|<quote|tt>|0> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-6>>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>> <no-break><pageref|auto-7><vspace|0.5fn>
+    </associate>
+  </collection>
+</auxiliary>
