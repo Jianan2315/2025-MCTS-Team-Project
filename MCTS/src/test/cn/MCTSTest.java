@@ -94,11 +94,13 @@ class MCTSTest {
 
     @Test
     void iteration() {
-        
-    }
-
-    @Test
-    void chooseBest() {
-
+        ConnectN connectN = new ConnectN();
+        State<ConnectN> initState = connectN.start();
+        Node<ConnectN> initNode = new CNNode(initState);
+        MCTS mcts = new MCTS(initNode);
+        mcts.iteration(100);
+        assertEquals(100, initNode.playouts());
+        mcts.iteration(100);
+        assertEquals(200, initNode.playouts());
     }
 }
