@@ -1,6 +1,9 @@
 package tictactoe;
 
 import core.Node;
+import core.State;
+import core.Move;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -53,7 +56,17 @@ public class MCTS {
 
     private Node<TicTacToe> expansion(Node<TicTacToe> node) {
         if (!node.getState().isTerminal() && node.hasUntriedMoves()) {
-            return node.expand();
+            for (Move<TicTacToe> move : node.getState().moves(node.getState().player())) {
+                if (move instanceof TicTacToe.TicTacToeMove tmove) {
+                    if (tmove.row() == 1 && tmove.col() == 1) {
+                        State<TicTacToe> nextState = node.getState().next(move);
+                        Node<TicTacToe> centerChild = new TicTacToeNode(nextState);
+                        node.children().add(centerChild);
+                        return centerChild;
+                    }
+                }
+            }
+            return node.expand();  // fallback
         }
         return node;
     }
@@ -62,8 +75,8 @@ public class MCTS {
         TicTacToe.TicTacToeState rolloutState = (TicTacToe.TicTacToeState) node.getState();
         rolloutState = new TicTacToe().new TicTacToeState(rolloutState.position()); // clone manually
         while (!rolloutState.isTerminal()) {
-            List<core.Move<TicTacToe>> legalMoves = (List<core.Move<TicTacToe>>) rolloutState.moves(rolloutState.player());
-            core.Move<TicTacToe> move = legalMoves.get(random.nextInt(legalMoves.size()));
+            List<Move<TicTacToe>> legalMoves = (List<Move<TicTacToe>>) rolloutState.moves(rolloutState.player());
+            Move<TicTacToe> move = legalMoves.get(random.nextInt(legalMoves.size()));
             rolloutState = (TicTacToe.TicTacToeState) rolloutState.next(move);
         }
         return rolloutState.winner().map(winner -> winner == node.getState().player() ? WIN_SCORE : 0).orElse(0);
