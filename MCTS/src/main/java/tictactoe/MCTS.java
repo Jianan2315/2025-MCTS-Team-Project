@@ -8,9 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Class to represent a Monte Carlo Tree Search for TicTacToe.
- */
 public class MCTS {
 
     private final Node<TicTacToe> root;
@@ -27,10 +24,10 @@ public class MCTS {
 
     public static void main(String[] args) {
         MCTS mcts = new MCTS(new TicTacToeNode(new TicTacToe().new TicTacToeState()));
-        Node<TicTacToe> root = mcts.root;
-        mcts.runSearch(1000); // Run MCTS for 1000 iterations
+        Node<TicTacToe> root = mcts.getRoot();
+        mcts.runSearch(1000);
         Node<TicTacToe> best = mcts.selectBestChild(root);
-        System.out.println("Best move selected: ");
+        System.out.println("Best move selected:");
         System.out.println(best.getState().toString());
     }
 
@@ -66,20 +63,56 @@ public class MCTS {
                     }
                 }
             }
-            return node.expand();  // fallback
+            return node.expand();
         }
         return node;
     }
 
+    // ✅ Lookahead-based defense logic
     private int simulation(Node<TicTacToe> node) {
-        TicTacToe.TicTacToeState rolloutState = (TicTacToe.TicTacToeState) node.getState();
-        rolloutState = new TicTacToe().new TicTacToeState(rolloutState.position()); // clone manually
-        while (!rolloutState.isTerminal()) {
-            List<Move<TicTacToe>> legalMoves = (List<Move<TicTacToe>>) rolloutState.moves(rolloutState.player());
-            Move<TicTacToe> move = legalMoves.get(random.nextInt(legalMoves.size()));
-            rolloutState = (TicTacToe.TicTacToeState) rolloutState.next(move);
+        TicTacToe.TicTacToeState state = (TicTacToe.TicTacToeState) node.getState();
+        state = new TicTacToe().new TicTacToeState(state.position());
+        int currentPlayer = state.player();
+
+        while (!state.isTerminal()) {
+            List<Move<TicTacToe>> legalMoves = (List<Move<TicTacToe>>) state.moves(state.player());
+            Move<TicTacToe> chosen = null;
+
+            // 1. Try to win immediately
+            for (Move<TicTacToe> move : legalMoves) {
+                TicTacToe.TicTacToeState next = (TicTacToe.TicTacToeState) state.next(move);
+                if (next.winner().isPresent() && next.winner().get() == state.player()) {
+                    chosen = move;
+                    break;
+                }
+            }
+
+            // 2. Block opponent from winning in next turn
+            if (chosen == null) {
+                int opponent = 1 - state.player();
+                for (Move<TicTacToe> move : legalMoves) {
+                    TicTacToe.TicTacToeState next = (TicTacToe.TicTacToeState) state.next(move);
+                    List<Move<TicTacToe>> oppMoves = (List<Move<TicTacToe>>) next.moves(opponent);
+                    for (Move<TicTacToe> oppMove : oppMoves) {
+                        TicTacToe.TicTacToeState future = (TicTacToe.TicTacToeState) next.next(oppMove);
+                        if (future.winner().isPresent() && future.winner().get() == opponent) {
+                            chosen = move;
+                            break;
+                        }
+                    }
+                    if (chosen != null) break;
+                }
+            }
+
+            // 3. Random fallback
+            if (chosen == null) {
+                chosen = legalMoves.get(random.nextInt(legalMoves.size()));
+            }
+
+            state = (TicTacToe.TicTacToeState) state.next(chosen);
         }
-        return rolloutState.winner().map(winner -> winner == node.getState().player() ? WIN_SCORE : 0).orElse(0);
+
+        return state.winner().map(winner -> winner == currentPlayer ? WIN_SCORE : 0).orElse(0);
     }
 
     private void backpropagation(Node<TicTacToe> node, int result) {
