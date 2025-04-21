@@ -30,10 +30,18 @@ public class ConnectFourTest {
     public void testWinnerHorizontal() {
         ConnectFour game = new ConnectFour();
         ConnectFour.ConnectFourState state = (ConnectFour.ConnectFourState) game.start();
-        for (int c = 0; c < 4; c++) {
-            state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, c)); // Player 1
-            state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, c)); // Player 0 dummy
-        }
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 0)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 6)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 1)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 6)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 2)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 6)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 3)); // P1
+
         assertTrue(state.winner().isPresent());
         assertEquals(1, (int) state.winner().get());
     }
@@ -44,8 +52,8 @@ public class ConnectFourTest {
         ConnectFour.ConnectFourState state = (ConnectFour.ConnectFourState) game.start();
         int col = 3;
         for (int r = 0; r < 4; r++) {
-            state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, col)); // Player 1
-            state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, col == 3 ? 2 : 3)); // Avoid block
+            state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), col));
+            state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), (col + 1) % 7)); // dummy
         }
         assertTrue(state.winner().isPresent());
         assertEquals(1, (int) state.winner().get());
@@ -63,18 +71,22 @@ public class ConnectFourTest {
         ConnectFour game = new ConnectFour();
         ConnectFour.ConnectFourState state = (ConnectFour.ConnectFourState) game.start();
 
-        // Diagonal win pattern for player 1 (\ direction)
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, 0)); // Row 5, Col 0
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, 1));
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, 1)); // Row 5, Col 1
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, 2));
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, 2));
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, 3));
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, 2)); // Row 4, Col 2
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, 3));
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, 3)); // Row 4, Col 3
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(0, 3));
-        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(1, 3)); // Row 3, Col 3
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 0)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 1)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 1)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 2)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 2)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 3)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 2)); // P1 (second layer)
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 3)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 3)); // P1
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 4)); // dummy
+
+        state = (ConnectFour.ConnectFourState) state.next(new ConnectFour.ConnectFourMove(state.player(), 3)); // P1 (third layer)
 
         assertTrue(state.winner().isPresent());
         assertEquals(1, (int) state.winner().get());
